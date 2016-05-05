@@ -1,4 +1,5 @@
 import React, {
+  AlertIOS,
   Animated,
   Component,
   StatusBar,
@@ -8,8 +9,9 @@ import React, {
   View
 } from 'react-native';
 
-import Model from './Model';
 import Cards from './Cards';
+import Constants from './Constants';
+import Model from './Model';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -51,6 +53,9 @@ class Feed extends Component {
     if (Model.atEnd()) {
       return;
     }
+    if (this.state.current.caption) {
+      AlertIOS.prompt(this.state.current.caption);
+    }
     Model.moveNext(true);
     bounce(this.state.yupScale);
   }
@@ -72,7 +77,7 @@ class Feed extends Component {
           <View style={styles.navBarIcon}>
             {HAMBURGER_ENABLED && <Icon name="bars" size={30} color="white" />}
           </View>
-          <Text style={styles.navBarText}>Object ID</Text>
+          <Text style={styles.navBarText}>{Constants.TITLE}</Text>
           <View style={styles.navBarForwardIcon}>
             {FORWARD_ENABLED && <Icon name="share" size={30} color="white" />}
           </View>
@@ -117,7 +122,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#333',
     flexDirection: 'row',
-    height: 48,
+    height: Constants.TOPBAR_HEIGHT,
   },
   navBarText: {
     color: 'white',
@@ -137,12 +142,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderTopWidth: 1,
     borderTopColor: '#ccc',
-    paddingTop: 10,
+    height: Constants.BOTTOMBAR_HEIGHT,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'stretch',
-    paddingBottom: 10,
   },
   actionBarSpacer: {
     width: 75,

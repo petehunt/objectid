@@ -11,7 +11,7 @@ class Session extends EventEmitter {
     this.frisbee = null;
   }
 
-  login(username, password) {
+  login(username, password, cb) {
     const frisbee = new Frisbee({
       baseURI: Constants.ENDPOINT,
       auth: [username, password],
@@ -20,6 +20,9 @@ class Session extends EventEmitter {
     this.loggingIn = true;
     this.emit('change');
     frisbee.get('/objects/', (err, res) => {
+      if (cb) {
+        cb(err, res);
+      }
       if (!err) {
         this.frisbee = frisbee;
         AsyncStorage.setItem('credentials', JSON.stringify([username, password]));

@@ -2,12 +2,16 @@
 
 import React, {Animated, Dimensions, StyleSheet, Text, View, Image} from 'react-native';
 
+import Constants from './Constants';
 import Lightbox from 'react-native-lightbox';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SwipeCards from './thirdparty/SwipeCards';
 
 const CARD_MARGIN = 5;
 const WIDTH = Dimensions.get('window').width;
+const MAX_HEIGHT = Dimensions.get('window').height - (
+  Constants.TOPBAR_HEIGHT + Constants.BOTTOMBAR_HEIGHT + 2 * CARD_MARGIN
+);
 
 let EndCard = React.createClass({
   render() {
@@ -33,7 +37,7 @@ let Card = React.createClass({
   renderImage() {
     const aspectRatio = this.props.data.height / this.props.data.width;
     const width = WIDTH - 2 * CARD_MARGIN;
-    const height = aspectRatio * width;
+    const height = Math.min(MAX_HEIGHT, aspectRatio * width);
 
     return (
       <Image
@@ -45,7 +49,7 @@ let Card = React.createClass({
 
   render() {
     if (!this.props.data.width) {
-      return <View style={styles.card}><Text>Loading...</Text></View>;
+      return <View style={styles.card}><Text style={styles.loadingText}>Loading...</Text></View>;
     }
 
     let caption = null;
@@ -164,5 +168,8 @@ const styles = StyleSheet.create({
     textShadowColor: 'rgba(0,0,0,0.9)',
     textShadowRadius: 5,
     textShadowOffset: {width: 0, height: 1},
+  },
+  loadingText: {
+    backgroundColor: '#eee',
   },
 });

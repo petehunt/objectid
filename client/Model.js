@@ -2,6 +2,9 @@
 
 import EventEmitter from 'eventemitter3';
 import {Image} from 'react-native';
+import Session from './Session';
+
+const FETCH_NEXT_LIMIT = 5;
 
 class Photo {
   constructor(model, id, url, caption) {
@@ -22,15 +25,50 @@ class Model extends EventEmitter {
   constructor() {
     super();
     this.allItems = [];
+    this.nextUrl = '/objects/';
+    this.fetching = false;
+    this.started = false;
+    Session.addListener('change', this.handleSessionChange.bind(this));
+  }
 
-    // Create sample data
-    for (let i = 0; i < 10; i++) {
-      this.allItems.push(new Photo(this, i, 'http://lorempixel.com/300/300/sports/' + i + '/', i % 2 === 0 ? null :'foo foo bar bar baz baz ' + i));
+  handleSessionChange() {
+    if (Session.isLoggedIn() && !this.started) {
+      this.started = true;
+      this.fetchNext();
     }
   }
 
+  fetchNext() {
+    if (this.fetching) {
+      return;
+    }
+    if (!this.nextUrl) {
+      return;
+    }
+
+    this.fetching = true;
+
+    Session.frisbee.get(this.nextUrl, (err, res, body) => {
+      this.fetching = false;
+
+      if (err) {
+        // TODO: better error handling
+        this.nextUrl = null;
+        return;
+      }
+
+      let parsed = JSON.parse(body);
+      this.nextUrl = parsed.next;
+      this.allItems = this.allItems.concat(
+        parsed.results.map(result => {
+          return new Photo(this, result.id, result.url, result.question);
+        })
+      );
+    });
+  }
+
   atEnd() {
-    return this.allItems.length === 0;
+    return this.allItems.length === 0 && !this.nextUrl;
   }
 
   getCurrent() {
@@ -42,9 +80,19 @@ class Model extends EventEmitter {
   }
 
   moveNext(marking) {
+    /*
+    Session.frisbee.post(
+      '/votes/' + Date.now() + '/',
+      {body: JSON.stringify({body: marking ? 'yes' : 'no'})}
+    );
+     */
     this.allItems = this.allItems.slice(1);
+
+    if (this.allItems.length < FETCH_NEXT_LIMIT) {
+      this.fetchNext();
+    }
+
     // TODO: do something with the marking
-    // TODO: preload additional items
     this.emit('change');
   }
 }

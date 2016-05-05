@@ -18,7 +18,7 @@ def index(request, object_id):
     object = Object.objects.get(pk=object_id)
     object_url = object.url
     object_question = object.question
-    
+
     c = {
         'object': object,
         'object_id': object_id,
@@ -50,7 +50,7 @@ class GroupViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = GroupSerializer
 
 
-    
+
 class VoteViewSet(viewsets.ModelViewSet):
     """
     API endpoint that accepts votes.
@@ -64,15 +64,21 @@ class ObjectList(generics.ListAPIView):
     API endpoint that returns eligible objects for a user.
     """
     serializer_class = ObjectSerializer
-    
+
     # returns objects for which user has not voted
     def get_queryset(self):
         user = self.request.user
         return Object.objects.exclude(vote__user=user)
-    
+
 
 class ObjectDetail(generics.RetrieveAPIView):
     queryset = Object.objects.all()
     serializer_class = ObjectSerializer
 
 
+class VoteViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that accepts votes.
+    """
+    queryset = Vote.objects.all()
+    serializer_class = VoteSerializer

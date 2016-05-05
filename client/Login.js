@@ -1,4 +1,5 @@
 import React, {
+  AlertIOS,
   Component,
   StatusBar,
   StyleSheet,
@@ -7,6 +8,7 @@ import React, {
   View
 } from 'react-native';
 
+import Constants from './Constants';
 import Session from './Session';
 
 class Login extends Component {
@@ -31,8 +33,12 @@ class Login extends Component {
   }
 
   handleSubmit() {
-    Session.login(this.state.username, this.state.password);
     // TODO: loading state...
+    Session.login(this.state.username, this.state.password, err => {
+      if (err) {
+        AlertIOS.alert('There was a problem logging in.');
+      }
+    });
   }
 
   render() {
@@ -40,7 +46,7 @@ class Login extends Component {
       <View style={styles.container}>
         <StatusBar hidden={true} />
         <View style={styles.innerContainer}>
-          <Text style={styles.title}>Object ID</Text>
+          <Text style={styles.title}>{Constants.TITLE}</Text>
           <TextInput
             autoCapitalize="none"
             autoCorrect={false}

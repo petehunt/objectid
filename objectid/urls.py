@@ -34,12 +34,8 @@ urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^objects/$', views.ObjectList.as_view()),
     url(r'^objects/(?P<pk>[0-9]+)/$', views.ObjectDetail.as_view()),
-    
-    
+
+
 ]
 
-admin.site.site_header = 'LEO Object Identification Network'
-
-
-
-
+admin.site.site_header = 'ID Me!'
