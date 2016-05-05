@@ -50,6 +50,15 @@ class GroupViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = GroupSerializer
 
 
+    
+class VoteViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that accepts votes.
+    """
+    queryset = Vote.objects.all()
+    serializer_class = VoteSerializer
+
+
 class ObjectList(generics.ListAPIView):
     """
     API endpoint that returns eligible objects for a user.
@@ -66,12 +75,4 @@ class ObjectDetail(generics.RetrieveAPIView):
     queryset = Object.objects.all()
     serializer_class = ObjectSerializer
 
-
-    
-class VoteViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that accepts votes.
-    """
-    queryset = Vote.objects.all()
-    serializer_class = VoteSerializer
 
