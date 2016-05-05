@@ -21,7 +21,7 @@ from main import views
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
-router.register(r'objects', views.ObjectViewSet)
+router.register(r'votes', views.VoteViewSet)
 
 
 
@@ -30,8 +30,11 @@ urlpatterns = [
     url(r'^(?P<object_id>[0-9]+)$', 'main.views.index'),
 
     #Django-rest-framework
-    url(r'^', include(router.urls)),
+    #url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^objects/$', views.ObjectList.as_view()),
+    url(r'^objects/(?P<pk>[0-9]+)/$', views.ObjectDetail.as_view()),
+    
     
 ]
 

@@ -1,12 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from main.models import Object
+from main.models import Object, Vote
 from django.contrib.auth.models import User, Group
 
 # Create your views here.
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from rest_framework import generics
+
 
 @login_required
 def index(request, object_id):
@@ -25,7 +27,7 @@ def index(request, object_id):
 
 
 from rest_framework import viewsets
-from serializers import UserSerializer, GroupSerializer, ObjectSerializer
+from serializers import UserSerializer, GroupSerializer, ObjectSerializer, VoteSerializer
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     """
@@ -43,9 +45,28 @@ class GroupViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = GroupSerializer
 
 
-class ObjectViewSet(viewsets.ReadOnlyModelViewSet):
+class ObjectList(generics.ListAPIView):
     """
-    API endpoint that allows groups to be viewed or edited.
+    API endpoint that returns eligible objects for a user.
     """
-    queryset = Object.objects.all() #update to include only eligible items without a vote
     serializer_class = ObjectSerializer
+    
+    # returns objects for which user has not voted
+    def get_queryset(self):
+        user = self.request.user
+        return Object.objects.exclude(vote__user=user)
+    
+
+class ObjectDetail(generics.RetrieveAPIView):
+    queryset = Object.objects.all()
+    serializer_class = ObjectSerializer
+
+
+    
+class VoteViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that accepts votes.
+    """
+    queryset = Vote.objects.all()
+    serializer_class = VoteSerializer
+

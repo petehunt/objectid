@@ -1,5 +1,5 @@
 from django.contrib import admin
-from main.models import Object, Case
+from main.models import Object, Case, Vote
 
 
 # Register your models here.
@@ -14,3 +14,9 @@ class ObjectAdmin(admin.ModelAdmin):
 @admin.register(Case)
 class CaseAdmin(admin.ModelAdmin):
     list_display = ['id', 'name']
+
+
+
+@admin.register(Vote)
+class CaseAdmin(admin.ModelAdmin):
+    list_display = ['created', 'object', 'user', 'body']

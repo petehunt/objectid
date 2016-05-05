@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User, Group
-from models import Object
+from models import Object, Vote
 from rest_framework import serializers
 
 
@@ -19,3 +19,13 @@ class ObjectSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Object
         fields = ('id','url', 'question',)
+        
+
+class VoteSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(
+        default=serializers.CurrentUserDefault()
+    )
+ 
+    class Meta:
+        model = Vote
+        fields = ('user','object','body',)
