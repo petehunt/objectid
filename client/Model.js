@@ -25,7 +25,7 @@ class Model extends EventEmitter {
 
     // Create sample data
     for (let i = 0; i < 10; i++) {
-      this.allItems.push(new Photo(this, i, 'http://lorempixel.com/300/300/sports/' + i + '/', 'foo foo bar bar baz baz ' + i));
+      this.allItems.push(new Photo(this, i, 'http://lorempixel.com/300/300/sports/' + i + '/', i % 2 === 0 ? null :'foo foo bar bar baz baz ' + i));
     }
   }
 
