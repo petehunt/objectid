@@ -32,6 +32,7 @@ class Login extends Component {
 
   handleSubmit() {
     Session.login(this.state.username, this.state.password);
+    // TODO: loading state...
   }
 
   render() {

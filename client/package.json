@@ -8,6 +8,7 @@
   "dependencies": {
     "clamp": "^1.0.1",
     "eventemitter3": "^1.2.0",
+    "frisbee": "^0.2.0",
     "react": "^0.14.8",
     "react-native": "^0.24.1",
     "react-native-lightbox": "^0.5.1",
