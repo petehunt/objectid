@@ -3,12 +3,15 @@ from main.models import Object, Case, Vote
 
 
 # Register your models here.
+class VoteInline(admin.TabularInline):
+    model = Vote
+
 
 @admin.register(Object)
 class ObjectAdmin(admin.ModelAdmin):
-    list_display = ['id', 'image_thumb','case']
+    list_display = ['id', 'image_thumb','case','vote_count']
     readonly_fields = ('image_tag',)
-    
+    inlines = [VoteInline,]
 
 
 @admin.register(Case)

@@ -1,3 +1,4 @@
+{% load markdown_deux_tags %}   
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -18,18 +19,68 @@
     </head>
     
     <body>
-    
-    <div class="container">
-      {% load markdown_deux_tags %}   
-      {% markdown %}
 
-# Object Number {{object_id}}
-##### Investigator notes: Little is known about this object. Possibly in the United States.
 
-      {% endmarkdown %}
-	  <img src = "{{object_url}}" width="400"></img>
-	  
-    </div> <!-- /container -->
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">NCMEC Object Identification Network</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav navbar-right">
+        <li class="active"><a href="#">Quiz <span class="sr-only">(current)</span></a></li>
+		
+		<li><a href="{{object_id|add:'1'}}">Next</a></li>
+		<li><a href="{{object_id|add:'-1'}}">Prev</a></li>
+        <li><a href="#">Score</a></li>
+        <li><a href="#">All</a></li>
+		<li><a href="#">{{user}}</a></li>
+		
+		
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+	
+    <div class="panel panel-default">
+		<div class="panel-heading">
+			<h1 class="panel-title">Object Number {{object_id}}</h1>
+		</div><!-- /panel-header -->
+		<div class="container panel-body">
+			<div class="col-md-5"> 
+				<img src = "{{object_url}}" width="400"></img>    
+			</div>
+			<div class = "col-md-5">
+				
+				<h3>Question: {{object_question}}</h3>
+				{% if 'seq' in request.build_absolute_uri %}
+					<div class="input-group">
+					  <span class="input-group-addon" id="basic-addon1">Answer</span>
+					  <input type="text" class="form-control" placeholder="This is..." aria-describedby="basic-addon1">
+					</div>
+				{% else %}
+					<!-- begin wwww.htmlcommentbox.com -->
+					 <div id="HCB_comment_box"><a href="http://www.htmlcommentbox.com">Comment Box</a> is loading comments...</div>
+					 <link rel="stylesheet" type="text/css" href="//www.htmlcommentbox.com/static/skins/bootstrap/twitter-bootstrap.css?v=0" />
+					 <script type="text/javascript" id="hcb"> /*<!--*/ if(!window.hcb_user){hcb_user={};} (function(){var s=document.createElement("script"), l=hcb_user.PAGE || (""+window.location).replace(/'/g,"%27"), h="//www.htmlcommentbox.com";s.setAttribute("type","text/javascript");s.setAttribute("src", h+"/jread?page="+encodeURIComponent(l).replace("+","%2B")+"&opts=16862&num=10&ts=1462462048601");if (typeof s!="undefined") document.getElementsByTagName("head")[0].appendChild(s);})(); /*-->*/ </script>
+					<!-- end www.htmlcommentbox.com -->
+				{% endif %}
+			</div>
+			
+		</div>	<!-- /container panel-body -->
+    </div> <!--/panel panel-default -->
+	
+	
 	
 	
     </body>

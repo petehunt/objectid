@@ -1,11 +1,13 @@
 from __future__ import unicode_literals
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 
 # Create your models here.
 
 class Case(models.Model):
     name = models.TextField(max_length=300)
+    eligible_group = models.ForeignKey(Group, default=1)
+
     def __unicode__(self):
         return u'%s' % (self.name)
     
@@ -13,7 +15,7 @@ class Case(models.Model):
 class Object(models.Model):
     url = models.URLField(max_length=300)
     case = models.ForeignKey(Case, default=1, null=True, blank=True)
-    question = models.TextField(max_length=300, default='', blank=True)    
+    question = models.TextField(max_length=300, default='Can you recognize anything in this image?', blank=True)    
     def __unicode__(self):
         return u'%s' % (self.url)
     
@@ -31,6 +33,9 @@ class Object(models.Model):
     image_thumb.short_description = 'Thumbnail'
     image_thumb.allow_tags = True
     
+    
+    def vote_count(self):
+        return Vote.objects.filter(object=self).count()
     
 class Vote(models.Model):
     user = models.ForeignKey(User)
@@ -54,21 +59,22 @@ class Vote(models.Model):
 
 #TODOS
 
-
+## Email investigators when they have new cases
+## Signup flows?
 ## Enable Case-level access control -- cases get groups, groups can see items
-## Enable certain cases to have multiple votes from the same person? Probably easier to have a list of voted stuff in case you want to review it and do it again
+## Enable certain cases to have multiple votes from the same person? Probably easier to have a list of voted stuff in case you want to review it and do it again.
+## gamification: give users points based on how many they have said yes/no to
 
 ## Enable commenting quick & dirty
-
 ## Upload to webserver
 
-
-## gamification: give users points based on how many they have said yes/no to
 ## Don't make users look through a comment thread
 
-## Deep vs. shallow investigation
-## iteration?
+## Image annotator
 
-## referral? 
+#Questions:
+## What works best to drive engagement & results? Deep vs. shallow investigation on each image?
+## How can we do iteration correctly?
+## How can we do referral correctly/securely? 
 
 

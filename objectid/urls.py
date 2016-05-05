@@ -26,6 +26,7 @@ router.register(r'votes', views.VoteViewSet)
 
 
 urlpatterns = [
+    url('^', include('django.contrib.auth.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^(?P<object_id>[0-9]+)$', 'main.views.index'),
 

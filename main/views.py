@@ -10,17 +10,22 @@ from django.template import RequestContext
 from rest_framework import generics
 
 
+#quiz mode
+
 @login_required
 def index(request, object_id):
 
     object = Object.objects.get(pk=object_id)
     object_url = object.url
+    object_question = object.question
     
     c = {
         'object': object,
         'object_id': object_id,
         'object_url': object_url,
-
+        'object_question': object_question,
+        'user':request.user,
+        'request':request,
     }
     return render_to_response('index.html', context=c)
 
